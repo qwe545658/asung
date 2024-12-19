@@ -12,10 +12,12 @@ async function server() {
         res.forEach((el) => {
             const card=document.createElement("div");
             card.classList="section1_cards_card"
-         card.innerHTML=`<img class="cards_card_img" src="${el.image}">
-          <p>${el.title}</p>
+         card.innerHTML=`<img width=auto height= 200px   background-color:  rgb(242, 242, 242) src="${el.image}">
+          <div class="section1_cards_card_text">
+         <p>${el.title}</p>
           <p>${el.price}</p>
-
+          <p>${el.rating.count}{</p>
+</div>
           `
           
 
