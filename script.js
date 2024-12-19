@@ -11,8 +11,13 @@ async function server() {
         console.log(res);
         res.forEach((el) => {
             const card=document.createElement("div");
-     
-         card.innerHTML=``
+            card.classList="section1_cards_card"
+         card.innerHTML=`<img class="cards_card_img" src="${el.image}">
+          <p>${el.title}</p>
+          <p>${el.price}</p>
+
+          `
+          
 
 
                cards.appendChild(card);
