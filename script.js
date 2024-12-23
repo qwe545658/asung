@@ -2,55 +2,50 @@ const cards=document.querySelector('.section1_cards');
 console.log(cards)
 
 
-async function server() {
+
+async function add() {
   try {
-    await fetch("https://fakestoreapi.com/products")
-      .then((res) => {
-        return res.json()})
-      .then((res) => {
-        console.log(res);
-        res.forEach((el) => {
-            const card=document.createElement("div");
-            card.classList="section1_cards_card"
-         card.innerHTML=`<img width=auto height= 200px   background-color:  rgb(242, 242, 242) src="${el.image}">
-          <div class="section1_cards_card_text">
-         <p>${el.title}</p>
-          <p>${el.price}</p>
-          <p>${el.rating.count}{</p>
-</div>
-          `
-          
+    const response = await fetch("https://fakestoreapi.com/products");
+    if (!response.ok) throw new Error("Ошибка загрузки");
+    const data = await response.json();
+    console.log(data)
 
-
-               cards.appendChild(card);
-        }); 
-      })
-      .catch(console.error(`Ошибка ${error}`));
+    diplayProduct(data);
   } catch (error) {
-    console.log(error);
+    cards.innerHTML = `<p> ${error.message}</p>`;
   }
-}  
+}
 
-server();
+function diplayProduct(products) {
+  products.forEach(element => {
+    const card = document.createElement("article");
+    card.classList.add('section1_cards_card')
+    const Delete = document.createElement("button");
+    card.innerHTML = `
+            <img src="${element.image}" alt="${element.title}" width='auto' height='300px'>
+            <h3>${element.title}</h3>  
+            <p>${element.price}</p>
+            <p>rate ${element.rating.rate}</p>
+            <p>count ${element.rating.count}</p>
+    `;
+    Delete.textContent = "del";
+    Delete.classList.add("delete-btn");
+    Delete.addEventListener("click", () => {deletePriduct(element.id)});
 
-/*category
-: 
-"men's clothing"
-description
-: 
-"Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday"
-id
-: 
-1
-image
-: 
-"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
-price
-: 
-109.95
-rating
-: 
-{rate: 3.9, count: 120}
-title
-: 
- "Fjallraven - Folds*/
+    card.appendChild(Delete);
+    cards.appendChild(card);
+  });
+}
+
+function deletePriduct(id) {
+  fetch(`https://fakestoreapi.com/products/${id}`, {
+    method: "DELETE",
+  })
+    .then(res => res.json())
+    .then(data => {
+      alert(`Товар удалён: ${data.title}`);
+      
+    });
+}
+
+add();
